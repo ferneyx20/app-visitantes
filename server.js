@@ -1,37 +1,30 @@
 const express = require('express');
 const cors = require('cors');
 const dotenv = require('dotenv');
-const usuariosRoutes = require('./routes/usuarios');
-const { verificarToken } = require('./middlewares/auth');
 
-// Configurar dotenv para usar variables de entorno
+// Configurar variables de entorno
 dotenv.config();
 
-// Inicializar express
+// Crear app de Express
 const app = express();
 
-// Middleware para parsear JSON
+// Middlewares
+app.use(cors());
 app.use(express.json());
 
-// Habilitar CORS
-app.use(cors());
-
 // Rutas
+const usuariosRoutes = require('./routes/usuarios');
+
+// Prefijo para rutas de usuarios
 app.use('/api/usuarios', usuariosRoutes);
 
-// Ruta raíz
+// Ruta base de prueba
 app.get('/', (req, res) => {
-  res.send('Bienvenido a la API de Registro de Visitantes');
+  res.send('✅ API Visitantes corriendo correctamente.');
 });
 
-// Iniciar el servidor
-const port = process.env.PORT || 5000;
-app.listen(port, () => {
-  console.log(`🌐 Servidor corriendo en http://localhost:${port}`);
+// Iniciar servidor
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => {
+  console.log(`🌐 Servidor corriendo en http://localhost:${PORT}`);
 });
-
-const bcrypt = require('bcryptjs');
-const salt = bcrypt.genSaltSync(10);
-const hash = bcrypt.hashSync("admin123", salt);
-
-// Luego actualiza la base de datos con el hash generado
