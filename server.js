@@ -1,39 +1,37 @@
 const express = require('express');
 const cors = require('cors');
 const dotenv = require('dotenv');
-const { Pool } = require('pg');
+const usuariosRoutes = require('./routes/usuarios');
+const { verificarToken } = require('./middlewares/auth');
 
-dotenv.config(); // Cargar variables de entorno
+// Configurar dotenv para usar variables de entorno
+dotenv.config();
 
+// Inicializar express
 const app = express();
-const port = process.env.PORT || 5000;
 
-// Middleware
-app.use(cors());
+// Middleware para parsear JSON
 app.use(express.json());
 
-// Conexión a la base de datos PostgreSQL
-const pool = new Pool({
-  user: process.env.DB_USER,
-  host: process.env.DB_HOST,
-  database: process.env.DB_NAME,
-  password: process.env.DB_PASSWORD,
-  port: process.env.DB_PORT,
-});
+// Habilitar CORS
+app.use(cors());
 
-pool.connect()
-  .then(() => console.log('✅ Conexión exitosa a PostgreSQL'))
-  .catch((err) => console.error('❌ Error de conexión:', err));
+// Rutas
+app.use('/api/usuarios', usuariosRoutes);
 
-// Ruta de prueba
+// Ruta raíz
 app.get('/', (req, res) => {
-  res.send('🚀 API de Registro de Visitantes funcionando');
+  res.send('Bienvenido a la API de Registro de Visitantes');
 });
 
 // Iniciar el servidor
+const port = process.env.PORT || 5000;
 app.listen(port, () => {
   console.log(`🌐 Servidor corriendo en http://localhost:${port}`);
 });
 
-const usuariosRoutes = require('./routes/usuarios');
-app.use('/api/usuarios', usuariosRoutes);
+const bcrypt = require('bcryptjs');
+const salt = bcrypt.genSaltSync(10);
+const hash = bcrypt.hashSync("admin123", salt);
+
+// Luego actualiza la base de datos con el hash generado

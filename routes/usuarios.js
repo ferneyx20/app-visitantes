@@ -1,9 +1,11 @@
 const express = require('express');
 const router = express.Router();
-const { registrarUsuario } = require('../controllers/usuarios.controller');
-const { loginUsuario } = require('../controllers/login.controller');
+const usuariosController = require('../controllers/usuarios.controller');
 
-router.post('/registro', registrarUsuario);
-router.post('/login', loginUsuario); // Ruta de inicio de sesión
+// Ruta para login
+router.post('/login', usuariosController.login);
+
+// Ruta para ver usuarios inactivos (restringido a admin)
+router.get('/pendientes', usuariosController.obtenerUsuariosInactivos);
 
 module.exports = router;
