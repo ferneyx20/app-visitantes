@@ -3,35 +3,40 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
 // 🔐 Login de usuario
-exports.login = async (req, res) => {
+
+exports.loginUsuario = async (req, res) => {
   const { correo, contrasena } = req.body;
 
   try {
     const resultado = await pool.query('SELECT * FROM usuarios WHERE correo = $1', [correo]);
-    const usuario = resultado.rows[0];
 
-    console.log('Correo recibido:', correo);
-console.log('Contraseña recibida:', contrasena);
-
-
-    if (!usuario) {
+    if (resultado.rows.length === 0) {
       return res.status(401).json({ mensaje: 'Correo o contraseña incorrectos' });
     }
 
-    const contraseñaValida = await bcrypt.compare(contrasena, usuario.contrasena);
-    if (!contraseñaValida) {
+    const usuario = resultado.rows[0];
+
+    const passwordValido = await bcrypt.compare(contrasena, usuario.contrasena);
+
+    if (!passwordValido) {
       return res.status(401).json({ mensaje: 'Correo o contraseña incorrectos' });
     }
 
     const token = jwt.sign(
       { id: usuario.id, rol: usuario.rol, sede_id: usuario.sede_id },
       process.env.JWT_SECRET,
-      { expiresIn: '8h' }
+      { expiresIn: '10h' }
     );
 
-    res.json({ token });
+    res.json({
+      mensaje: `Inicio de sesión exitoso como ${usuario.rol}`,
+      token,
+      rol: usuario.rol
+    });
+    
+    
   } catch (error) {
-    console.error('Error en login:', error);
+    console.error('Error al iniciar sesión:', error);
     res.status(500).json({ mensaje: 'Error del servidor' });
   }
 };

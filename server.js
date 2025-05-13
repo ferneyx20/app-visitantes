@@ -20,7 +20,7 @@ app.use('/api/usuarios', usuariosRoutes);
 
 // Ruta base de prueba
 app.get('/', (req, res) => {
-  res.send('✅ API Visitantes corriendo correctamente.');
+  res.send('✅ API Visitantes corriendo correctamente.'); 
 });
 
 // Iniciar servidor
