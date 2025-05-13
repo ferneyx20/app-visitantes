@@ -18,6 +18,9 @@ const usuariosRoutes = require('./routes/usuarios');
 // Prefijo para rutas de usuarios
 app.use('/api/usuarios', usuariosRoutes);
 
+const visitasRoutes = require('./routes/visitas');
+app.use('/api/visitas', visitasRoutes);
+
 // Ruta base de prueba
 app.get('/', (req, res) => {
   res.send('✅ API Visitantes corriendo correctamente.'); 

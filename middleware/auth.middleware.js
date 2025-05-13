@@ -1,11 +1,9 @@
 const jwt = require('jsonwebtoken');
 
-// Middleware de autenticación
-const verificarToken = (req, res, next) => {
-  const token = req.header('Authorization')?.replace('Bearer ', '');
-
+exports.verificarToken = (req, res, next) => {
+  const token = req.headers.authorization?.split(' ')[1];
   if (!token) {
-    return res.status(401).json({ mensaje: 'Acceso no autorizado' });
+    return res.status(401).json({ mensaje: 'Token no proporcionado' });
   }
 
   try {
@@ -13,16 +11,13 @@ const verificarToken = (req, res, next) => {
     req.usuario = decoded;
     next();
   } catch (error) {
-    return res.status(401).json({ mensaje: 'Token no válido' });
+    res.status(401).json({ mensaje: 'Token inválido' });
   }
 };
 
-// Middleware para verificar si es admin
-const esAdmin = (req, res, next) => {
+exports.esAdmin = (req, res, next) => {
   if (req.usuario.rol !== 'admin') {
-    return res.status(403).json({ mensaje: 'Acceso denegado: solo admin puede realizar esta acción' });
+    return res.status(403).json({ mensaje: 'Acceso denegado' });
   }
   next();
 };
-
-module.exports = { verificarToken, esAdmin };

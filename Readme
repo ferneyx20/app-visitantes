@@ -1,0 +1,99 @@
+Proyecto: Sistema de Registro de Visitantes
+
+🏢 Descripción
+
+Sistema de registro y control de visitantes para empresas, edificios o conjuntos residenciales. El sistema permite registrar el ingreso de visitantes, capturar su información, asociarlos con un empleado anfitrión y controlar el estado de la visita.
+
+🔧 Tecnologías Utilizadas
+
+Backend: Node.js, Express.js
+
+Base de datos: PostgreSQL
+
+Autenticación: JWT + bcrypt
+
+Pruebas: Postman
+
+Frontend (futuro): React
+
+🔐 Módulo de Autenticación
+
+Inicio de sesión con usuario y contraseña.
+
+Generación de token JWT con rol y sede del usuario.
+
+Middleware para validar token y rol.
+
+👤 Gestión de Usuarios
+
+Registro de nuevos usuarios.
+
+Los usuarios se crean como inactivos por defecto.
+
+Solo un admin puede aprobar usuarios.
+
+Almacenamiento seguro de contraseñas usando bcrypt.
+
+📄 Módulo de Registro de Visitas
+
+Campos registrados:
+
+nombre_visitante
+
+cedula
+
+empresa
+
+motivo
+
+foto (base64 o URL)
+
+tipo_registro: manual o autogestionado
+
+estado: activa, finalizada, rechazada
+
+fecha_ingreso: automática
+
+fecha_salida: cuando finaliza la visita
+
+empleado_id: referencia al anfitrión
+
+sede_id: referencia a la sede
+
+usuario_id: usuario que registra
+
+Validaciones:
+
+No permitir visitas activas duplicadas por cédula.
+
+Validar existencia de referencias (empleado, sede, usuario).
+
+Validar campos obligatorios.
+
+🗒️ Consultas y Listados
+
+Listar visitas filtradas por estado (activa, finalizada, rechazada).
+
+Filtrar visitas por fecha, sede o empleado.
+
+Obtener detalles de una visita específica.
+
+Cambiar estado de visita y registrar fecha de salida.
+
+📷 Fotos
+
+Se guarda foto del visitante.
+
+A futuro: captura en frontend con cámara web o móvil.
+
+✅ Estado Actual
+
+Autenticación funcional.
+
+Gestión de usuarios con aprobación por admin.
+
+Módulo de visitas: tabla creada, rutas en desarrollo.
+
+📅 Pruebas
+
+Se realizan pruebas de rutas con Postman.

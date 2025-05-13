@@ -67,8 +67,7 @@ exports.solicitarAcceso = async (req, res) => {
     }
 
     // Encriptar la contraseña
-    const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(contrasena, salt);
+    const hashedPassword = await bcrypt.hash(contrasena, 10); // Asegurar que el hash se genera correctamente
 
     // Insertar el nuevo usuario con estado inactivo y rol 'estandar'
     await pool.query(
