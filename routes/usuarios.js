@@ -3,6 +3,9 @@ const router = express.Router();
 const usuariosController = require('../controllers/usuarios.controller');
 const { solicitarAcceso } = require('../controllers/usuarios.controller');
 const { aprobarUsuario } = require('../controllers/usuarios.controller');
+const { verificarToken, esAdmin } = require('../middleware/auth.middleware');
+
+
 
 
 // Ruta para login

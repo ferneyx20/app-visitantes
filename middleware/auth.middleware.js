@@ -10,7 +10,7 @@ const verificarToken = (req, res, next) => {
 
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    req.usuario = decoded; // Agregamos los datos decodificados del usuario al objeto req
+    req.usuario = decoded;
     next();
   } catch (error) {
     return res.status(401).json({ mensaje: 'Token no válido' });
