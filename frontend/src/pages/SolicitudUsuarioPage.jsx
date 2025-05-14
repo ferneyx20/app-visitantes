@@ -5,14 +5,14 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
 const SolicitudUsuarioPage = () => {
+  const [id, setId] = useState('');
   const [nombre, setNombre] = useState('');
-  const [correo, setCorreo] = useState('');
   const [contrasena, setContrasena] = useState('');
   const navigate = useNavigate();
 
   const handleSolicitud = async () => {
     try {
-      await axios.post('http://localhost:5000/api/usuarios/solicitar-acceso', { nombre, correo, contrasena });
+      await axios.post('http://localhost:5000/api/usuarios/solicitar-acceso', { id, nombre, contrasena });
       alert('Solicitud enviada. Un administrador debe aprobar tu acceso.');
       navigate('/');
     } catch (error) {
@@ -66,23 +66,22 @@ const SolicitudUsuarioPage = () => {
               margin="normal"
               required
               fullWidth
-              id="nombre"
-              label="Nombre Completo"
-              name="nombre"
+              id="id"
+              label="Identificación"
+              name="id"
               autoFocus
-              value={nombre}
-              onChange={(e) => setNombre(e.target.value)}
+              value={id}
+              onChange={(e) => setId(e.target.value)}
             />
             <TextField
               margin="normal"
               required
               fullWidth
-              id="correo"
-              label="Correo Electrónico"
-              name="correo"
-              autoComplete="email"
-              value={correo}
-              onChange={(e) => setCorreo(e.target.value)}
+              id="nombre"
+              label="Nombre Completo"
+              name="nombre"
+              value={nombre}
+              onChange={(e) => setNombre(e.target.value)}
             />
             <TextField
               margin="normal"
@@ -92,7 +91,6 @@ const SolicitudUsuarioPage = () => {
               label="Contraseña"
               type="password"
               id="contrasena"
-              autoComplete="current-password"
               value={contrasena}
               onChange={(e) => setContrasena(e.target.value)}
             />

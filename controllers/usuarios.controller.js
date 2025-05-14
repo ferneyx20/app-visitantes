@@ -4,22 +4,20 @@ const jwt = require('jsonwebtoken');
 
 // Login de usuario
 exports.loginUsuario = async (req, res) => {
-  const { correo, contrasena } = req.body;
+  const { id, contrasena } = req.body;
 
   try {
-    const resultado = await pool.query('SELECT * FROM usuarios WHERE correo = $1', [correo]);
+    const resultado = await pool.query('SELECT * FROM usuarios WHERE id = $1', [id]);
 
     if (resultado.rows.length === 0) {
-      return res.status(401).json({ mensaje: 'Correo o contraseña incorrectos' });
+      return res.status(401).json({ mensaje: 'ID o contraseña incorrectos' });
     }
 
     const usuario = resultado.rows[0];
-    const passwordValido = process.env.NODE_ENV === 'development'
-      ? contrasena === usuario.contrasena // Comparación directa para pruebas locales
-      : await bcrypt.compare(contrasena, usuario.contrasena);
+    const passwordValido = await bcrypt.compare(contrasena, usuario.contrasena);
 
     if (!passwordValido) {
-      return res.status(401).json({ mensaje: 'Correo o contraseña incorrectos' });
+      return res.status(401).json({ mensaje: 'ID o contraseña incorrectos' });
     }
 
     if (!usuario.activo) {
@@ -61,20 +59,27 @@ exports.obtenerUsuariosInactivos = async (req, res) => {
 
 // Solicitud de acceso de un nuevo usuario estándar
 exports.solicitarAcceso = async (req, res) => {
-  const { nombre, correo, contrasena } = req.body;
+  const { id, nombre, contrasena } = req.body;
 
   try {
-    const existe = await pool.query('SELECT * FROM usuarios WHERE correo = $1', [correo]);
+    // Verificar si el ID existe en la tabla de empleados
+    const empleado = await pool.query('SELECT * FROM empleados WHERE id = $1', [id]);
+    if (empleado.rows.length === 0) {
+      return res.status(400).json({ mensaje: 'El ID no está registrado como empleado.' });
+    }
+
+    // Verificar si el usuario ya existe
+    const existe = await pool.query('SELECT * FROM usuarios WHERE id = $1', [id]);
     if (existe.rows.length > 0) {
-      return res.status(400).json({ mensaje: 'Este correo ya fue registrado.' });
+      return res.status(400).json({ mensaje: 'Este ID ya fue registrado.' });
     }
 
     const hashedPassword = await bcrypt.hash(contrasena, 10);
 
     await pool.query(
-      `INSERT INTO usuarios (nombre, correo, contrasena, rol, activo)
+      `INSERT INTO usuarios (id, nombre, contrasena, rol, activo)
        VALUES ($1, $2, $3, 'estandar', FALSE)`,
-      [nombre, correo, hashedPassword]
+      [id, nombre, hashedPassword]
     );
 
     res.status(201).json({ mensaje: 'Solicitud enviada. Un administrador debe aprobar tu acceso.' });

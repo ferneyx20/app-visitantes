@@ -22,6 +22,8 @@ CREATE TABLE empleados (
     sede_id INT REFERENCES sedes(id)
 );
 
+ALTER TABLE empleados ADD CONSTRAINT unique_id UNIQUE (id);
+
 CREATE TABLE visitas (
     id SERIAL PRIMARY KEY,
     nombre_visitante VARCHAR(100) NOT NULL,

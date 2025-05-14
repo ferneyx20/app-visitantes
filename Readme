@@ -28,27 +28,44 @@ Administrador: /admin/dashboard
 
 Estándar: /usuario/dashboard
 
-2. Panel de Administración
+2. Panel de Administración /admin/dashboard
+
+crear barra lateral con botones
+
+predeterminado (
 
 Ver visitas (todas)
 
-Ver visitas activas
+Ver visitas activas) y estadisticas de visitas por sede fecha menu  (total, activas, finalizadas)
 
-Consultar visitas finalizadas
+boton consultas 
+( ingresar por barra lateral ) Consultar visitas finalizadas
 
-Ver y aprobar usuarios pendientes
+boton usuarios 
+Ver y aprobar usuarios pendientes y activos 
 
+boton empleados 
 Ver y administrar empleados
 
-Añadir nueva visita
+esto en la venta predeterminada con simblolo boton + en la parte superior derecha
+Añadir nueva visita y abrir formulario de visita
 
+en panel predeterminado vistas activas en una galeria solamente, las inactivas solo visibles desde consultas
 Cambiar estado de visitas (finalizar, rechazar)
 
+boton de enlace al lado de boton + genera un qr para escanear y envia a formulario de visita autogestionada
 Acceder al enlace de visita autogestionada
 
 Aprobar/rechazar visitas autogestionadas
+tambien desde panel de administración
 
-3. Panel de Usuario Estándar
+boton sedes 
+Ver y administrar sedes
+añadir nueva sede y editar los existentes
+
+3. Panel de Usuario Estándar /usuario/dashboard
+
+diseño compartido con el de administrador pero con solo las siguientes ocpiones
 
 Ver sus propias visitas
 
@@ -63,6 +80,7 @@ Acceder al enlace de autogestión
 Aprobar/rechazar visitas autogestionadas
 
 Restricciones: no puede ver empleados ni visitas antiguas ajenas
+
 
 4. Registro Manual de Visitas
 
@@ -129,6 +147,21 @@ Ver empleados
 Añadir nuevos empleados
 
 Eliminar empleados
+
+añadir sede a la que pertenezca
+
+9. Gestión de Sedes (solo admin)
+añadir nuevas sedes
+editar sedes
+eliminar sedes
+asociar sede a usuario estandar
+
+10. Uso de Identificación para Usuarios
+
+- El inicio de sesión se realiza utilizando la identificación (`id`) del usuario en lugar del correo electrónico.
+- Las solicitudes de creación de usuario deben validar que el `id` proporcionado exista en la tabla de empleados.
+- Si el `id` no está registrado como empleado, la solicitud será rechazada.
+-----
 
 Requisitos Técnicos
 

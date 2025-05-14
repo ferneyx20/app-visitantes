@@ -3,12 +3,12 @@ import { TextField, Button, Container, Typography } from '@mui/material';
 import axios from 'axios';
 
 const LoginPage = () => {
-  const [correo, setCorreo] = useState('');
+  const [id, setId] = useState('');
   const [contrasena, setContrasena] = useState('');
 
   const handleLogin = async () => {
     try {
-      const response = await axios.post('http://localhost:5000/api/usuarios/login', { correo, contrasena });
+      const response = await axios.post('http://localhost:5000/api/usuarios/login', { id, contrasena });
       alert(response.data.mensaje);
       localStorage.setItem('token', response.data.token);
       window.location.href = response.data.rol === 'admin' ? '/admin' : '/visitas';
@@ -21,11 +21,11 @@ const LoginPage = () => {
     <Container maxWidth="sm">
       <Typography variant="h4" gutterBottom>Iniciar Sesión</Typography>
       <TextField
-        label="Correo"
+        label="Identificación"
         fullWidth
         margin="normal"
-        value={correo}
-        onChange={(e) => setCorreo(e.target.value)}
+        value={id}
+        onChange={(e) => setId(e.target.value)}
       />
       <TextField
         label="Contraseña"

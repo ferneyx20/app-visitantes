@@ -11,11 +11,11 @@ exports.listarEmpleados = async (req, res) => {
 };
 
 exports.agregarEmpleado = async (req, res) => {
-  const { nombre, cargo } = req.body;
+  const { id, nombre, cargo } = req.body;
   try {
     const resultado = await pool.query(
-      'INSERT INTO empleados (nombre, cargo) VALUES ($1, $2) RETURNING *',
-      [nombre, cargo]
+      'INSERT INTO empleados (id, nombre, cargo) VALUES ($1, $2, $3) RETURNING *',
+      [id, nombre, cargo]
     );
     res.status(201).json({ mensaje: 'Empleado agregado correctamente', empleado: resultado.rows[0] });
   } catch (error) {

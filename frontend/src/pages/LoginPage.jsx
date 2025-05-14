@@ -5,14 +5,14 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
 const LoginPage = () => {
-  const [correo, setCorreo] = useState('');
+  const [id, setId] = useState('');
   const [contrasena, setContrasena] = useState('');
   const navigate = useNavigate();
 
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:5000/api/usuarios/login', { correo, contrasena });
+      const response = await axios.post('http://localhost:5000/api/usuarios/login', { id, contrasena });
       alert(response.data.mensaje);
       localStorage.setItem('token', response.data.token);
       window.location.href = response.data.redireccion; // Redirigir según el rol
@@ -67,13 +67,12 @@ const LoginPage = () => {
               margin="normal"
               required
               fullWidth
-              id="email"
-              label="Correo Electrónico"
-              name="email"
-              autoComplete="email"
+              id="id"
+              label="Identificación"
+              name="id"
               autoFocus
-              value={correo}
-              onChange={(e) => setCorreo(e.target.value)}
+              value={id}
+              onChange={(e) => setId(e.target.value)}
             />
             <TextField
               margin="normal"
@@ -81,7 +80,7 @@ const LoginPage = () => {
               fullWidth
               name="password"
               label="Contraseña"
-              type="password" // Eliminar la lógica de mostrar/ocultar contraseña
+              type="password"
               id="password"
               autoComplete="current-password"
               value={contrasena}
