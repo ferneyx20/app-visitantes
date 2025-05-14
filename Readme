@@ -1,99 +1,113 @@
-Proyecto: Sistema de Registro de Visitantes
+# Proyecto: Sistema de Registro de Visitantes
 
-🏢 Descripción
+## 🎯 Objetivo General
+Desarrollar una aplicación web para registrar, gestionar y controlar el acceso de visitantes a una sede empresarial. Debe incluir autenticación, roles de usuario, control de accesos, registro de visitas con foto y lectura de documento, entre otros.
 
-Sistema de registro y control de visitantes para empresas, edificios o conjuntos residenciales. El sistema permite registrar el ingreso de visitantes, capturar su información, asociarlos con un empleado anfitrión y controlar el estado de la visita.
+---
 
-🔧 Tecnologías Utilizadas
+## 📌 Módulos Funcionales
 
-Backend: Node.js, Express.js
+### 1. Autenticación de Usuarios
+**Requisitos:**
+- Formulario de login.
+- Verificación de credenciales con bcrypt.
+- Generación de token JWT.
+- Acceso diferenciado según rol (admin o estándar).
 
-Base de datos: PostgreSQL
+**Desarrollo:**
+- **Página de Login (/login):**
+  - Formulario solicitar usuario: correo + contraseña.
+  - Al enviar: llamada a `POST /api/login`.
+  - Redirección según rol:
+    - `admin` → Panel de administración.
+    - `estándar` → Panel de autogestión o visita.
 
-Autenticación: JWT + bcrypt
+---
 
-Pruebas: Postman
+### 2. Gestión de Usuarios (solo Admin)
+**Requisitos:**
+- Listar usuarios pendientes de aprobación (`activo = false`).
+- Aprobar usuarios.
+- Crear nuevos usuarios (registro).
 
-Frontend (futuro): React
+**Desarrollo:**
+- **Página de Aprobación de Usuarios (/admin/usuarios):**
+  - Tabla de usuarios inactivos.
+  - Botón “Aprobar”.
+  - Uso de token con rol admin.
 
-🔐 Módulo de Autenticación
+---
 
-Inicio de sesión con usuario y contraseña.
+### 3. Registro de Visitantes
+**Requisitos:**
+- Captura de nombre, cédula, empresa, motivo.
+- Captura de foto desde cámara o archivo.
+- Selección de tipo de registro (manual o autogestionado).
+- Estado de la visita (activa, finalizada, rechazada).
+- Asociación con sede, empleado y usuario que registra.
 
-Generación de token JWT con rol y sede del usuario.
+**Desarrollo:**
+- **Página Registro Manual (/registro):**
+  - Formulario completo.
+  - Campo para captura de foto (input tipo file o cámara con JS).
+  - Selector de tipo registro.
+  - Enviar a `POST /api/visitas`.
 
-Middleware para validar token y rol.
+- **Página de Autogestión (visitante) (/autoregistro):**
+  - Igual al formulario anterior, simplificado.
+  - Envío sin intervención de usuario estándar.
+  - Estado inicia como activa.
+  - **Responsive** para abrirse en móviles.
 
-👤 Gestión de Usuarios
+---
 
-Registro de nuevos usuarios.
+### 4. Gestión de Visitas
+**Requisitos:**
+- Listar visitas activas, finalizadas y rechazadas.
+- Filtrar por fecha, estado, visitante o empleado.
+- Finalizar visita (agrega `fecha_salida`).
+- Rechazar visita.
 
-Los usuarios se crean como inactivos por defecto.
+**Desarrollo:**
+- **Página de Control de Visitas (/admin/visitas):**
+  - Tabla con visitas.
+  - Filtros por estado y fechas.
+  - Botones para finalizar/rechazar.
 
-Solo un admin puede aprobar usuarios.
+---
 
-Almacenamiento seguro de contraseñas usando bcrypt.
+### 5. Base de Datos
+**Tablas principales:**
+- `usuarios` (admin/estándar).
+- `visitas`.
+- `empleados`.
+- `sedes`.
 
-📄 Módulo de Registro de Visitas
+**Relaciones:**
+- Se relacionan por claves foráneas.
+- Se valida existencia y coherencia de las relaciones.
 
-Campos registrados:
+---
 
-nombre_visitante
+## ✅ Funcionalidades Complementarias
 
-cedula
+### Seguridad
+- Token JWT en todas las rutas protegidas.
+- Middleware para verificar token y rol.
+- Hash seguro con bcrypt para contraseñas.
 
-empresa
+### Validaciones
+- **Backend:** campos obligatorios, formatos, longitudes.
+- **Frontend:** validaciones visuales antes de enviar.
 
-motivo
+---
 
-foto (base64 o URL)
-
-tipo_registro: manual o autogestionado
-
-estado: activa, finalizada, rechazada
-
-fecha_ingreso: automática
-
-fecha_salida: cuando finaliza la visita
-
-empleado_id: referencia al anfitrión
-
-sede_id: referencia a la sede
-
-usuario_id: usuario que registra
-
-Validaciones:
-
-No permitir visitas activas duplicadas por cédula.
-
-Validar existencia de referencias (empleado, sede, usuario).
-
-Validar campos obligatorios.
-
-🗒️ Consultas y Listados
-
-Listar visitas filtradas por estado (activa, finalizada, rechazada).
-
-Filtrar visitas por fecha, sede o empleado.
-
-Obtener detalles de una visita específica.
-
-Cambiar estado de visita y registrar fecha de salida.
-
-📷 Fotos
-
-Se guarda foto del visitante.
-
-A futuro: captura en frontend con cámara web o móvil.
-
-✅ Estado Actual
-
-Autenticación funcional.
-
-Gestión de usuarios con aprobación por admin.
-
-Módulo de visitas: tabla creada, rutas en desarrollo.
-
-📅 Pruebas
-
-Se realizan pruebas de rutas con Postman.
+## 🛠️ Pendientes por Implementar
+- **Frontend completo (React):**
+  - Login.
+  - Registros visitantes (manual/autogestión).
+  - Panel admin (usuarios + visitas).
+- Captura de foto en navegador.
+- Lectura de documento por cámara o lector QR.
+- Estilos y UX amigable.
+- Exportar registros en CSV o PDF.

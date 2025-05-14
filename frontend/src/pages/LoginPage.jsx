@@ -11,7 +11,7 @@ const LoginPage = () => {
       const response = await axios.post('http://localhost:5000/api/usuarios/login', { correo, contrasena });
       alert(response.data.mensaje);
       localStorage.setItem('token', response.data.token);
-      window.location.href = response.data.rol === 'admin' ? '/admin' : '/visitas';
+      window.location.href = response.data.rol === 'admin' ? '/admin/usuarios' : '/visitas';
     } catch (error) {
       alert('Error al iniciar sesión');
     }

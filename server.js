@@ -14,16 +14,17 @@ app.use(express.json());
 
 // Rutas
 const usuariosRoutes = require('./routes/usuarios');
+const visitasRoutes = require('./routes/visitas');
 
 // Prefijo para rutas de usuarios
 app.use('/api/usuarios', usuariosRoutes);
 
-const visitasRoutes = require('./routes/visitas');
+// Prefijo para rutas de visitas
 app.use('/api/visitas', visitasRoutes);
 
 // Ruta base de prueba
 app.get('/', (req, res) => {
-  res.send('✅ API Visitantes corriendo correctamente.'); 
+  res.send('✅ API Visitantes corriendo correctamente.');
 });
 
 // Iniciar servidor
