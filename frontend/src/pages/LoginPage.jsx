@@ -10,7 +10,7 @@ const LoginPage = () => {
   const navigate = useNavigate();
 
   const handleLogin = async (e) => {
-    e.preventDefault(); // Evitar el comportamiento por defecto del formulario
+    e.preventDefault();
     try {
       const response = await axios.post('http://localhost:5000/api/usuarios/login', { correo, contrasena });
       alert(response.data.mensaje);
@@ -81,7 +81,7 @@ const LoginPage = () => {
               fullWidth
               name="password"
               label="Contraseña"
-              type="password"
+              type="password" // Eliminar la lógica de mostrar/ocultar contraseña
               id="password"
               autoComplete="current-password"
               value={contrasena}

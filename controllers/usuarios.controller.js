@@ -14,7 +14,9 @@ exports.loginUsuario = async (req, res) => {
     }
 
     const usuario = resultado.rows[0];
-    const passwordValido = await bcrypt.compare(contrasena, usuario.contrasena);
+    const passwordValido = process.env.NODE_ENV === 'development'
+      ? contrasena === usuario.contrasena // Comparación directa para pruebas locales
+      : await bcrypt.compare(contrasena, usuario.contrasena);
 
     if (!passwordValido) {
       return res.status(401).json({ mensaje: 'Correo o contraseña incorrectos' });

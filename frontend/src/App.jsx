@@ -36,16 +36,6 @@ function App() {
             </PrivateRoute>
           }
         />
-        <Route
-          path="/empleados"
-          element={
-            <PrivateRoute role="admin">
-              <EmployeesPage />
-            </PrivateRoute>
-          }
-        />
-        <Route path="/solicitar-usuario" element={<SolicitudUsuarioPage />} />
-        <Route path="/autogestion" element={<AutogestionPage />} />
       </Routes>
     </Router>
   );

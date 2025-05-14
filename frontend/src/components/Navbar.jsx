@@ -11,11 +11,11 @@ const Navbar = () => {
   };
 
   return (
-    <AppBar position="static">
+    <AppBar position="fixed" sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}>
       <Toolbar>
         <Typography
           variant="h6"
-          style={{ flexGrow: 1, cursor: 'pointer' }}
+          sx={{ flexGrow: 1, cursor: 'pointer' }}
           onClick={() => navigate('/dashboard')}
         >
           Panel de Control
