@@ -28,6 +28,15 @@ const VisitsPage = () => {
     setCedula('');
   };
 
+  const rechazarVisita = async (id) => {
+    const token = localStorage.getItem('token');
+    await axios.put(`http://localhost:5000/api/visitas/rechazar/${id}`, {}, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    alert('Visita rechazada');
+    setVisitas(visitas.filter((visita) => visita.id !== id));
+  };
+
   return (
     <Container>
       <Typography variant="h4" gutterBottom>Registro de Visitas</Typography>
@@ -53,6 +62,9 @@ const VisitsPage = () => {
         {visitas.map((visita) => (
           <ListItem key={visita.id}>
             <ListItemText primary={visita.nombre_visitante} secondary={visita.cedula} />
+            <Button variant="contained" color="secondary" onClick={() => rechazarVisita(visita.id)}>
+              Rechazar
+            </Button>
           </ListItem>
         ))}
       </List>

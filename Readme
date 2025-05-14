@@ -1,113 +1,191 @@
-# Proyecto: Sistema de Registro de Visitantes
+Sistema de Registro de Visitantes
 
-## 🎯 Objetivo General
-Desarrollar una aplicación web para registrar, gestionar y controlar el acceso de visitantes a una sede empresarial. Debe incluir autenticación, roles de usuario, control de accesos, registro de visitas con foto y lectura de documento, entre otros.
+Este proyecto es una aplicación web completa para gestionar visitas en una empresa o institución. Permite registrar visitas de manera manual o autogestionada, y administrar usuarios, empleados y sedes. Está diseñada para dos tipos de usuario (administrador y estándar), e incluye funcionalidades móviles.
 
----
+Requisitos del Proyecto
 
-## 📌 Módulos Funcionales
+Roles del sistema:
 
-### 1. Autenticación de Usuarios
-**Requisitos:**
-- Formulario de login.
-- Verificación de credenciales con bcrypt.
-- Generación de token JWT.
-- Acceso diferenciado según rol (admin o estándar).
+Administrador: acceso completo a todas las funciones.
 
-**Desarrollo:**
-- **Página de Login (/login):**
-  - Formulario solicitar usuario: correo + contraseña.
-  - Al enviar: llamada a `POST /api/login`.
-  - Redirección según rol:
-    - `admin` → Panel de administración.
-    - `estándar` → Panel de autogestión o visita.
+Usuario Estándar: acceso limitado a funcionalidades esenciales.
 
----
+Visitante (sin cuenta): puede registrar una visita desde un enlace público (autogestión).
 
-### 2. Gestión de Usuarios (solo Admin)
-**Requisitos:**
-- Listar usuarios pendientes de aprobación (`activo = false`).
-- Aprobar usuarios.
-- Crear nuevos usuarios (registro).
+Funcionalidades Generales
 
-**Desarrollo:**
-- **Página de Aprobación de Usuarios (/admin/usuarios):**
-  - Tabla de usuarios inactivos.
-  - Botón “Aprobar”.
-  - Uso de token con rol admin.
+1. Inicio de Sesión
 
----
+Ruta: /login
 
-### 3. Registro de Visitantes
-**Requisitos:**
-- Captura de nombre, cédula, empresa, motivo.
-- Captura de foto desde cámara o archivo.
-- Selección de tipo de registro (manual o autogestionado).
-- Estado de la visita (activa, finalizada, rechazada).
-- Asociación con sede, empleado y usuario que registra.
+Campos: correo, contraseña
 
-**Desarrollo:**
-- **Página Registro Manual (/registro):**
-  - Formulario completo.
-  - Campo para captura de foto (input tipo file o cámara con JS).
-  - Selector de tipo registro.
-  - Enviar a `POST /api/visitas`.
+Seguridad: autenticación JWT
 
-- **Página de Autogestión (visitante) (/autoregistro):**
-  - Igual al formulario anterior, simplificado.
-  - Envío sin intervención de usuario estándar.
-  - Estado inicia como activa.
-  - **Responsive** para abrirse en móviles.
+Redirección según rol:
 
----
+Administrador: /admin/dashboard
 
-### 4. Gestión de Visitas
-**Requisitos:**
-- Listar visitas activas, finalizadas y rechazadas.
-- Filtrar por fecha, estado, visitante o empleado.
-- Finalizar visita (agrega `fecha_salida`).
-- Rechazar visita.
+Estándar: /usuario/dashboard
 
-**Desarrollo:**
-- **Página de Control de Visitas (/admin/visitas):**
-  - Tabla con visitas.
-  - Filtros por estado y fechas.
-  - Botones para finalizar/rechazar.
+2. Panel de Administración
 
----
+Ver visitas (todas)
 
-### 5. Base de Datos
-**Tablas principales:**
-- `usuarios` (admin/estándar).
-- `visitas`.
-- `empleados`.
-- `sedes`.
+Ver visitas activas
 
-**Relaciones:**
-- Se relacionan por claves foráneas.
-- Se valida existencia y coherencia de las relaciones.
+Consultar visitas finalizadas
 
----
+Ver y aprobar usuarios pendientes
 
-## ✅ Funcionalidades Complementarias
+Ver y administrar empleados
 
-### Seguridad
-- Token JWT en todas las rutas protegidas.
-- Middleware para verificar token y rol.
-- Hash seguro con bcrypt para contraseñas.
+Añadir nueva visita
 
-### Validaciones
-- **Backend:** campos obligatorios, formatos, longitudes.
-- **Frontend:** validaciones visuales antes de enviar.
+Cambiar estado de visitas (finalizar, rechazar)
 
----
+Acceder al enlace de visita autogestionada
 
-## 🛠️ Pendientes por Implementar
-- **Frontend completo (React):**
-  - Login.
-  - Registros visitantes (manual/autogestión).
-  - Panel admin (usuarios + visitas).
-- Captura de foto en navegador.
-- Lectura de documento por cámara o lector QR.
-- Estilos y UX amigable.
-- Exportar registros en CSV o PDF.
+Aprobar/rechazar visitas autogestionadas
+
+3. Panel de Usuario Estándar
+
+Ver sus propias visitas
+
+Ver visitas activas
+
+Añadir visita
+
+Cambiar estado de visitas
+
+Acceder al enlace de autogestión
+
+Aprobar/rechazar visitas autogestionadas
+
+Restricciones: no puede ver empleados ni visitas antiguas ajenas
+
+4. Registro Manual de Visitas
+
+Ruta: /api/visitas
+
+Método: POST
+
+Campos requeridos:
+
+nombre_visitante
+
+cedula
+
+empresa
+
+motivo
+
+foto
+
+tipo_registro: 'manual'
+
+estado: por defecto 'activa'
+
+empleado_id, sede_id, usuario_id
+
+5. Estado de Visita
+
+Puede ser:
+
+activa
+
+finalizada
+
+rechazada
+
+pendiente (solo en autogestión)
+
+6. Autogestión de Visitas (sin login)
+
+Ruta: /autogestion
+
+Desde el móvil, cualquier visitante puede:
+
+Completar un formulario con sus datos
+
+Enviar una solicitud de visita autogestionada
+
+Almacena como tipo_registro = autogestionado y estado = pendiente
+
+Aparece en dashboards para aprobación o rechazo
+
+7. Gestión de Usuarios (solo admin)
+
+Ver usuarios pendientes (activo = false)
+
+Aprobar usuarios (activar cuenta)
+
+Eliminar usuarios
+
+8. Gestión de Empleados (solo admin)
+
+Ver empleados
+
+Añadir nuevos empleados
+
+Eliminar empleados
+
+Requisitos Técnicos
+
+Backend (Node.js + Express + PostgreSQL)
+
+Autenticación JWT
+
+Bcrypt para hash de contraseñas
+
+Validaciones de campos
+
+Rutas protegidas por middleware
+
+Frontend (React.js)
+
+Interfaz responsive
+
+Paneles diferenciados por rol
+
+Formularios de registro y gestión
+
+Botones y vistas para cambiar estados de visita
+
+Vista especial para autogestión (móvil)
+
+Base de Datos
+
+Tablas requeridas:
+
+usuarios: id, nombre, correo, contraseña, rol, activo, sede_id
+
+visitas: id, nombre_visitante, cedula, empresa, motivo, foto, tipo_registro, estado, fecha_ingreso, fecha_salida, empleado_id, sede_id, usuario_id
+
+empleados: id, nombre, cargo, sede_id
+
+sedes: id, nombre
+
+Flujo de Trabajo Esperado
+
+Inicio de sesión (admin o estándar)
+
+Carga del panel según el rol
+
+Registro de visitas desde panel o enlace de autogestión
+
+Visualización y administración de visitas y usuarios
+
+Aprobación/rechazo de visitas autogestionadas
+
+Finalización manual de visitas activas
+
+Consideraciones Finales
+
+Código debe estar organizado por carpetas (controllers, routes, models, middleware)
+
+Código frontend en React debe tener rutas protegidas y navegación según rol
+
+Se debe garantizar la seguridad y validación de datos en cada paso
+
+Las funciones deben estar bien documentadas para facilitar mantenimiento

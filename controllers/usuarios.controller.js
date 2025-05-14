@@ -20,13 +20,24 @@ exports.loginUsuario = async (req, res) => {
       return res.status(401).json({ mensaje: 'Correo o contraseña incorrectos' });
     }
 
+    if (!usuario.activo) {
+      return res.status(403).json({ mensaje: 'El usuario no está activado' });
+    }
+
     const token = jwt.sign(
       { id: usuario.id, rol: usuario.rol },
       process.env.JWT_SECRET,
       { expiresIn: '10h' }
     );
 
-    res.json({ mensaje: 'Inicio de sesión exitoso', token, rol: usuario.rol });
+    const redireccion = usuario.rol === 'admin' ? '/admin/dashboard' : '/usuario/dashboard';
+
+    res.json({
+      mensaje: 'Inicio de sesión exitoso',
+      token,
+      rol: usuario.rol,
+      redireccion
+    });
   } catch (error) {
     console.error('Error al iniciar sesión:', error);
     res.status(500).json({ mensaje: 'Error del servidor' });
@@ -110,6 +121,21 @@ exports.cambiarEstadoUsuario = async (req, res) => {
     res.json({ mensaje: 'Estado del usuario actualizado', usuario: resultado.rows[0] });
   } catch (error) {
     console.error('Error al cambiar estado del usuario:', error);
+    res.status(500).json({ mensaje: 'Error del servidor' });
+  }
+};
+
+// Eliminar usuario
+exports.eliminarUsuario = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const resultado = await pool.query('DELETE FROM usuarios WHERE id = $1', [id]);
+    if (resultado.rowCount === 0) {
+      return res.status(404).json({ mensaje: 'Usuario no encontrado' });
+    }
+    res.json({ mensaje: 'Usuario eliminado correctamente' });
+  } catch (error) {
+    console.error('Error al eliminar usuario:', error);
     res.status(500).json({ mensaje: 'Error del servidor' });
   }
 };

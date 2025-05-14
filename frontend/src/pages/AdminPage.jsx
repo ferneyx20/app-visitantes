@@ -37,6 +37,24 @@ const AdminPage = () => {
     setUsuarios(usuarios.map((usuario) => (usuario.id === id ? { ...usuario, activo } : usuario)));
   };
 
+  const aprobarVisita = async (id) => {
+    const token = localStorage.getItem('token');
+    await axios.put(`http://localhost:5000/api/visitas/finalizar/${id}`, {}, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    alert('Visita aprobada');
+    setVisitas(visitas.filter((visita) => visita.id !== id));
+  };
+
+  const rechazarVisita = async (id) => {
+    const token = localStorage.getItem('token');
+    await axios.put(`http://localhost:5000/api/visitas/rechazar/${id}`, {}, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    alert('Visita rechazada');
+    setVisitas(visitas.filter((visita) => visita.id !== id));
+  };
+
   return (
     <Container>
       <Typography variant="h4" gutterBottom>Panel de Administración</Typography>
@@ -57,6 +75,12 @@ const AdminPage = () => {
         {visitas.map((visita) => (
           <ListItem key={visita.id}>
             <ListItemText primary={visita.nombre_visitante} secondary={visita.cedula} />
+            <Button variant="contained" color="primary" onClick={() => aprobarVisita(visita.id)}>
+              Aprobar
+            </Button>
+            <Button variant="contained" color="secondary" onClick={() => rechazarVisita(visita.id)}>
+              Rechazar
+            </Button>
           </ListItem>
         ))}
       </List>

@@ -9,14 +9,15 @@ const LoginPage = () => {
   const [contrasena, setContrasena] = useState('');
   const navigate = useNavigate();
 
-  const handleLogin = async () => {
+  const handleLogin = async (e) => {
+    e.preventDefault(); // Evitar el comportamiento por defecto del formulario
     try {
       const response = await axios.post('http://localhost:5000/api/usuarios/login', { correo, contrasena });
       alert(response.data.mensaje);
       localStorage.setItem('token', response.data.token);
-      window.location.href = response.data.rol === 'admin' ? '/admin' : '/visitas';
+      window.location.href = response.data.redireccion; // Redirigir según el rol
     } catch (error) {
-      alert('Error al iniciar sesión');
+      alert(error.response?.data?.mensaje || 'Error al iniciar sesión');
     }
   };
 
@@ -59,15 +60,15 @@ const LoginPage = () => {
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
-            Sign in
+            Iniciar Sesión
           </Typography>
-          <Box component="form" noValidate sx={{ mt: 1 }}>
+          <Box component="form" noValidate sx={{ mt: 1 }} onSubmit={handleLogin}>
             <TextField
               margin="normal"
               required
               fullWidth
               id="email"
-              label="Email Address"
+              label="Correo Electrónico"
               name="email"
               autoComplete="email"
               autoFocus
@@ -79,7 +80,7 @@ const LoginPage = () => {
               required
               fullWidth
               name="password"
-              label="Password"
+              label="Contraseña"
               type="password"
               id="password"
               autoComplete="current-password"
@@ -91,9 +92,16 @@ const LoginPage = () => {
               fullWidth
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
-              onClick={handleLogin}
             >
-              Sign In
+              Iniciar Sesión
+            </Button>
+            <Button
+              fullWidth
+              variant="outlined"
+              sx={{ mt: 1 }}
+              onClick={() => navigate('/solicitar-usuario')}
+            >
+              Solicitar Activación de Usuario
             </Button>
           </Box>
         </Box>

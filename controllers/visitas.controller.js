@@ -71,3 +71,51 @@ exports.obtenerEstadisticas = async (req, res) => {
     res.status(500).json({ mensaje: 'Error del servidor' });
   }
 };
+
+exports.finalizarVisita = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const resultado = await pool.query(
+      "UPDATE visitas SET estado = 'finalizada', fecha_salida = NOW() WHERE id = $1 RETURNING *",
+      [id]
+    );
+    if (resultado.rowCount === 0) {
+      return res.status(404).json({ mensaje: 'Visita no encontrada' });
+    }
+    res.json({ mensaje: 'Visita finalizada correctamente', visita: resultado.rows[0] });
+  } catch (error) {
+    console.error('Error al finalizar visita:', error);
+    res.status(500).json({ mensaje: 'Error del servidor' });
+  }
+};
+
+exports.rechazarVisita = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const resultado = await pool.query(
+      "UPDATE visitas SET estado = 'rechazada' WHERE id = $1 RETURNING *",
+      [id]
+    );
+    if (resultado.rowCount === 0) {
+      return res.status(404).json({ mensaje: 'Visita no encontrada' });
+    }
+    res.json({ mensaje: 'Visita rechazada correctamente', visita: resultado.rows[0] });
+  } catch (error) {
+    console.error('Error al rechazar visita:', error);
+    res.status(500).json({ mensaje: 'Error del servidor' });
+  }
+};
+
+exports.listarVisitasPorUsuario = async (req, res) => {
+  const { usuario_id } = req.params;
+  try {
+    const resultado = await pool.query(
+      'SELECT * FROM visitas WHERE usuario_id = $1 ORDER BY fecha_ingreso DESC',
+      [usuario_id]
+    );
+    res.json(resultado.rows);
+  } catch (error) {
+    console.error('Error al listar visitas por usuario:', error);
+    res.status(500).json({ mensaje: 'Error del servidor' });
+  }
+};

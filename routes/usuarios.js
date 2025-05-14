@@ -18,4 +18,7 @@ router.put('/aprobar/:id', verificarToken, esAdmin, usuariosController.aprobarUs
 // Cambiar estado de usuario (activar/desactivar)
 router.put('/cambiar-estado/:id', verificarToken, esAdmin, usuariosController.cambiarEstadoUsuario);
 
+// Nueva ruta para eliminar usuarios
+router.delete('/:id', verificarToken, esAdmin, usuariosController.eliminarUsuario);
+
 module.exports = router;

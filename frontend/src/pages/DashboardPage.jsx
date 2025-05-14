@@ -5,6 +5,7 @@ import axios from 'axios';
 
 const DashboardPage = () => {
   const [visitasActivas, setVisitasActivas] = useState([]);
+  const [visitasPendientes, setVisitasPendientes] = useState([]);
   const [estadisticas, setEstadisticas] = useState({});
   const [rol, setRol] = useState('');
 
@@ -14,20 +15,33 @@ const DashboardPage = () => {
       const userRole = JSON.parse(atob(token.split('.')[1])).rol;
       setRol(userRole);
 
-      const visitasResponse = await axios.get('http://localhost:5000/api/visitas/listar?estado=activa', {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      setVisitasActivas(visitasResponse.data);
-
-      if (userRole === 'admin') {
-        const estadisticasResponse = await axios.get('http://localhost:5000/api/visitas/estadisticas', {
+      try {
+        const visitasResponse = await axios.get('http://localhost:5000/api/visitas/listar?estado=activa', {
           headers: { Authorization: `Bearer ${token}` },
         });
-        setEstadisticas(estadisticasResponse.data);
+        setVisitasActivas(visitasResponse.data);
+
+        if (userRole === 'admin') {
+          const estadisticasResponse = await axios.get('http://localhost:5000/api/visitas/estadisticas', {
+            headers: { Authorization: `Bearer ${token}` },
+          });
+          setEstadisticas(estadisticasResponse.data);
+        }
+      } catch (error) {
+        alert('Error al cargar datos');
       }
     };
 
+    const fetchPendientes = async () => {
+      const token = localStorage.getItem('token');
+      const response = await axios.get('http://localhost:5000/api/visitas/listar?estado=pendiente', {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      setVisitasPendientes(response.data);
+    };
+
     fetchData();
+    fetchPendientes();
   }, []);
 
   return (
@@ -54,6 +68,22 @@ const DashboardPage = () => {
                 </Typography>
                 <ul>
                   {visitasActivas.map((visita) => (
+                    <li key={visita.id}>
+                      {visita.nombre_visitante} - {visita.cedula}
+                    </li>
+                  ))}
+                </ul>
+              </Paper>
+            </Grid>
+
+            {/* Visitas Pendientes */}
+            <Grid item xs={12}>
+              <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>
+                <Typography variant="h6" gutterBottom>
+                  Visitas Pendientes
+                </Typography>
+                <ul>
+                  {visitasPendientes.map((visita) => (
                     <li key={visita.id}>
                       {visita.nombre_visitante} - {visita.cedula}
                     </li>

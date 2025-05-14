@@ -24,4 +24,13 @@ router.get('/listar', visitasController.listarVisitas);
 // Ruta para obtener estadísticas de visitas
 router.get('/estadisticas', visitasController.obtenerEstadisticas);
 
+// Nueva ruta para finalizar visitas
+router.put('/finalizar/:id', visitasController.finalizarVisita);
+
+// Nueva ruta para rechazar visitas
+router.put('/rechazar/:id', visitasController.rechazarVisita);
+
+// Nueva ruta para listar visitas por usuario
+router.get('/usuario/:usuario_id', visitasController.listarVisitasPorUsuario);
+
 module.exports = router;
