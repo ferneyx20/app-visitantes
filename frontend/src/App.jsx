@@ -1,10 +1,8 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import LoginPage from './pages/LoginPage';
-import DashboardPage from './pages/DashboardPage';
-import EmployeesPage from './pages/EmployeesPage';
-import SolicitudUsuarioPage from './pages/SolicitudUsuarioPage';
-import AutogestionPage from './pages/AutogestionPage';
+import AdminDashboardPage from './pages/AdminDashboardPage';
+import UserDashboardPage from './pages/UserDashboardPage';
 
 const PrivateRoute = ({ children, role }) => {
   const token = localStorage.getItem('token');
@@ -24,7 +22,7 @@ function App() {
           path="/admin/dashboard"
           element={
             <PrivateRoute role="admin">
-              <DashboardPage />
+              <AdminDashboardPage />
             </PrivateRoute>
           }
         />
@@ -32,7 +30,7 @@ function App() {
           path="/usuario/dashboard"
           element={
             <PrivateRoute role="estandar">
-              <DashboardPage />
+              <UserDashboardPage />
             </PrivateRoute>
           }
         />
