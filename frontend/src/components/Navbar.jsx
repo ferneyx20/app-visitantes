@@ -13,10 +13,16 @@ const Navbar = () => {
   return (
     <AppBar position="static">
       <Toolbar>
-        <Typography variant="h6" style={{ flexGrow: 1 }}>
-          Sistema de Registro de Visitantes
+        <Typography
+          variant="h6"
+          style={{ flexGrow: 1, cursor: 'pointer' }}
+          onClick={() => navigate('/dashboard')}
+        >
+          Panel de Control
         </Typography>
-        <Button color="inherit" onClick={handleLogout}>Cerrar Sesión</Button>
+        <Button color="inherit" onClick={handleLogout}>
+          Cerrar Sesión
+        </Button>
       </Toolbar>
     </AppBar>
   );

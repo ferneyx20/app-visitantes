@@ -91,3 +91,25 @@ exports.aprobarUsuario = async (req, res) => {
     res.status(500).json({ mensaje: 'Error del servidor' });
   }
 };
+
+// Activar o desactivar usuario
+exports.cambiarEstadoUsuario = async (req, res) => {
+  const { id } = req.params;
+  const { activo } = req.body;
+
+  try {
+    const resultado = await pool.query(
+      'UPDATE usuarios SET activo = $1 WHERE id = $2 RETURNING id, nombre, correo, rol, activo',
+      [activo, id]
+    );
+
+    if (resultado.rowCount === 0) {
+      return res.status(404).json({ mensaje: 'Usuario no encontrado' });
+    }
+
+    res.json({ mensaje: 'Estado del usuario actualizado', usuario: resultado.rows[0] });
+  } catch (error) {
+    console.error('Error al cambiar estado del usuario:', error);
+    res.status(500).json({ mensaje: 'Error del servidor' });
+  }
+};

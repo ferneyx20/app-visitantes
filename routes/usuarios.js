@@ -15,4 +15,7 @@ router.post('/solicitar-acceso', usuariosController.solicitarAcceso);
 // Aprobar usuario (solo admin)
 router.put('/aprobar/:id', verificarToken, esAdmin, usuariosController.aprobarUsuario);
 
+// Cambiar estado de usuario (activar/desactivar)
+router.put('/cambiar-estado/:id', verificarToken, esAdmin, usuariosController.cambiarEstadoUsuario);
+
 module.exports = router;

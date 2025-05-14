@@ -21,3 +21,10 @@ exports.esAdmin = (req, res, next) => {
   }
   next();
 };
+
+exports.esUsuarioEstandar = (req, res, next) => {
+  if (req.usuario.rol !== 'estandar' && req.usuario.rol !== 'admin') {
+    return res.status(403).json({ mensaje: 'Acceso denegado' });
+  }
+  next();
+};

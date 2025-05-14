@@ -54,3 +54,20 @@ exports.listarVisitas = async (req, res) => {
     res.status(500).json({ mensaje: 'Error del servidor' });
   }
 };
+
+exports.obtenerEstadisticas = async (req, res) => {
+  try {
+    const totalVisitas = await pool.query('SELECT COUNT(*) FROM visitas');
+    const visitasActivas = await pool.query("SELECT COUNT(*) FROM visitas WHERE estado = 'activa'");
+    const visitasInactivas = await pool.query("SELECT COUNT(*) FROM visitas WHERE estado != 'activa'");
+
+    res.json({
+      totalVisitas: parseInt(totalVisitas.rows[0].count, 10),
+      visitasActivas: parseInt(visitasActivas.rows[0].count, 10),
+      visitasInactivas: parseInt(visitasInactivas.rows[0].count, 10),
+    });
+  } catch (error) {
+    console.error('Error al obtener estadísticas:', error);
+    res.status(500).json({ mensaje: 'Error del servidor' });
+  }
+};

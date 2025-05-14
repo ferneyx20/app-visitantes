@@ -21,4 +21,7 @@ router.post('/registrar', visitasController.registrarVisita);
 // Ruta para listar visitas con filtros
 router.get('/listar', visitasController.listarVisitas);
 
+// Ruta para obtener estadísticas de visitas
+router.get('/estadisticas', visitasController.obtenerEstadisticas);
+
 module.exports = router;

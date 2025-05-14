@@ -37,7 +37,7 @@ const LoginPage = () => {
           zIndex: -1,
           inset: 0,
           backgroundImage:
-            'radial-gradient(ellipse at 50% 50%, hsl(210, 100%, 97%), hsl(0, 0%, 100%))',
+            'radial-gradient(ellipse at 50% 50%,rgb(221, 73, 68), hsl(0, 48.60%, 48.00%))',
           backgroundRepeat: 'no-repeat',
         },
       }}
