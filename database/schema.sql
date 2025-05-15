@@ -1,9 +1,12 @@
 DROP TABLE IF EXISTS visitas, usuarios, empleados, sedes;
 
-CREATE TABLE sedes (
+CREATE TABLE IF NOT EXISTS sedes (
     id SERIAL PRIMARY KEY,
     nombre VARCHAR(100) NOT NULL
 );
+
+-- Inserta datos de prueba si es necesario
+INSERT INTO sedes (nombre) VALUES ('Sede A'), ('Sede B') ON CONFLICT DO NOTHING;
 
 CREATE TABLE usuarios (
     id SERIAL PRIMARY KEY,
@@ -19,7 +22,7 @@ CREATE TABLE empleados (
     id SERIAL PRIMARY KEY,
     nombre VARCHAR(100) NOT NULL,
     cargo VARCHAR(100) NOT NULL,
-    sede_id INT REFERENCES sedes(id)
+    sede_id INT REFERENCES sedes(id) ON DELETE SET NULL
 );
 
 ALTER TABLE empleados ADD CONSTRAINT unique_id UNIQUE (id);

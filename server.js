@@ -17,6 +17,7 @@ const usuariosRoutes = require('./routes/usuarios');
 const visitasRoutes = require('./routes/visitas');
 const autogestionRoutes = require('./routes/autogestion'); // Nueva ruta para autogestión
 const empleadosRoutes = require('./routes/empleados'); // Nueva ruta para empleados
+const sedesRoutes = require('./routes/sedes'); // Importar la ruta de sedes
 
 // Prefijo para rutas de usuarios
 app.use('/api/usuarios', usuariosRoutes);
@@ -27,6 +28,7 @@ app.use('/api/visitas', visitasRoutes);
 // Registrar la nueva ruta
 app.use('/api/autogestion', autogestionRoutes);
 app.use('/api/empleados', empleadosRoutes); // Registrar la nueva ruta
+app.use('/api/sedes', sedesRoutes); // Registrar la ruta de sedes
 
 // Ruta base de prueba
 app.get('/', (req, res) => {

@@ -7,7 +7,11 @@ const pool = new Pool({
   database: process.env.DB_NAME,
   password: process.env.DB_PASSWORD,
   port: process.env.DB_PORT,
-  ssl: process.env.DB_SSL === 'true' // Agregar soporte para SSL si es necesario
+  ssl: process.env.DB_SSL === 'true',
+});
+
+pool.on('error', (err) => {
+  console.error('Error en la conexión a la base de datos:', err);
 });
 
 module.exports = pool;
